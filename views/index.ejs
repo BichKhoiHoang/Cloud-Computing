@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Upload</title>
-    <link rel="stylesheet" href="stylesheets/style.css" />
+    <%- include("../partials/head") %>
   </head>
   <body>
-    <h1>Upload Images</h1>
-    <form method="POST" action="/upload" enctype="multipart/form-data">
-      <input
-        type="file"
-        id="image_input"
-        name="images"
-        accept="image/*"
-        multiple
-      />
-      <input type="submit" value="Upload" />
-    </form>
-    <div id="display_selected_image"></div>
+    <%- include("../components/navbar") %>
+    <main class="container mx-auto p-10">
+      <div class="text-center w-full p-4">
+        <h1 class="text-5xl font-bold">Upload Images</h1>
+      </div>
+      <div class="w-full items-center justify-center flex p-4">
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+          <input
+            type="file"
+            id="image_input"
+            name="images"
+            accept="image/*"
+            multiple
+            class="file-input file-input-bordered w-full max-w-xs"
+          />
+          <input type="submit" value="Upload" class="btn btn-primary" />
+        </form>
+      </div>
+      <div
+        id="display_selected_image"
+        class="w-full p-4 border-slate-400 border h-[50vh] flex overflow-scroll gap-2"
+      >
+        <div class="card w-96 bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="card-actions justify-end">
+              <button
+                class="btn btn-square btn-sm"
+                onclick="alert('Remove me')"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <img src="/images/uploaded/1698828905790.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
     <script src="javascript/script.js"></script>
   </body>
 </html>

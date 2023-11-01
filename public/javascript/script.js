@@ -13,7 +13,7 @@ image_input.addEventListener("change", function () {
       // Create an image element
       const imgElement = document.createElement("img");
       imgElement.src = uploaded_image;
-      imgElement.classList.add("uploaded-image"); // Add a class for styling
+      imgElement.classList.add("flex-auto"); // Add a class for styling
 
       // Append the image element to the frame
       frame.appendChild(imgElement);
