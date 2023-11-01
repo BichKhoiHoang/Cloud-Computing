@@ -1,15 +1,8 @@
 const image_input = document.querySelector("#image_input");
 const frame = document.querySelector("#display_selected_image");
 
-image_input.addEventListener("change", function (event) {
+image_input.addEventListener("change", function () {
   display_selected_image.innerHTML = "";
-  const maxFiles = 5;
-  const input = event.target;
-  const files = input.files;
-  if (files.length > maxFiles) {
-    alert(`You can only upload up to ${maxFiles} files.`);
-    input.value = ""; // Clear the file input
-  }
 
   for (const file of this.files) {
     const reader = new FileReader();

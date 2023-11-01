@@ -1,17 +1,33 @@
 const express = require("express");
-const multer = require("multer");
+const createError = require("http-errors");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+
+const multer = require("multer");
 const sharp = require("sharp");
 
 const app = express();
-const port = 4000;
 
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+app.use(logger("dev"));
 app.use(express.json());
-app.use(express.static("views"));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploadedImages");
+    cb(null, "public/images/uploaded");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -25,11 +41,19 @@ const upload = multer({
   // },
 });
 
-app.set("view engine", "ejs");
+function checkFileType(file, cb) {
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check the extension
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check the mimetype
+  const mimetype = filetypes.test(file.mimetype);
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
+}
 
 app.post("/upload", upload.array("images", 5), async function (req, res, next) {
   try {
@@ -47,7 +71,7 @@ app.post("/upload", upload.array("images", 5), async function (req, res, next) {
           .resize(640, 320)
           .toFormat("jpeg")
           .jpeg({ quality: 90 })
-          .toFile(`processedImages/${newFileName}`);
+          .toFile(`public/images/processed/${newFileName}`);
 
         return newFileName;
       })
@@ -58,21 +82,20 @@ app.post("/upload", upload.array("images", 5), async function (req, res, next) {
     res.json({ success: false, message: "Error processing images" });
   }
 });
-
-app.listen(port, () => {
-  console.log("listening on port: " + port);
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
-function checkFileType(file, cb) {
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check the extension
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check the mimetype
-  const mimetype = filetypes.test(file.mimetype);
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
-}
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
+
+module.exports = app;
