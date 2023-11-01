@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
     cb(null, "public/images/uploaded");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   },
 });
 
@@ -56,6 +56,7 @@ function checkFileType(file, cb) {
 }
 
 app.post("/upload", upload.array("images", 5), async function (req, res, next) {
+  let images = [];
   try {
     if (
       req.fileValidationError &&
@@ -67,17 +68,24 @@ app.post("/upload", upload.array("images", 5), async function (req, res, next) {
       req.files.map(async (file) => {
         const newFileName = `${Date.now()}-${file.originalname}`;
 
+        const savePath = `public/images/processed/${newFileName}`;
+
         await sharp(file.path)
           .resize(640, 320)
           .toFormat("jpeg")
           .jpeg({ quality: 90 })
-          .toFile(`public/images/processed/${newFileName}`);
+          .toFile(savePath);
 
-        return newFileName;
+        images.push({
+          processed: `/images/processed/${newFileName}`,
+          uploaded: `/images/uploaded/${file.originalname}`,
+        });
+
+        return `/images/processed/${newFileName}`;
       })
     );
-
-    res.render("result", { processedImages });
+    console.log(images);
+    res.render("result", { images });
   } catch (error) {
     res.json({ success: false, message: "Error processing images" });
   }

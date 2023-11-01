@@ -6,10 +6,10 @@
     <title>Document</title>
   </head>
   <body>
-    <% processedImages.forEach(image => { %>
+    <% images.forEach(image => { %>
     <div>
       <h3>Original Image</h3>
-      <img src="<%= image.original %>" alt="Original Image" />
+      <img src="<%= image.uploaded %>" alt="Original Image" />
       <h3>Resized Image</h3>
       <img src="<%= image.processed %>" alt="Resized Image" />
     </div>
