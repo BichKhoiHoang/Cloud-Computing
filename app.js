@@ -16,7 +16,7 @@ const sharp = require("sharp");
 const app = express();
 
 // Cloud Services Set-up
-// Create unique bucket name
+// Create unique bucket name and this bucket is public (objects can be accessed).
 const bucketName = "khoihoang-19122001";
 // const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 const s3 = new AWS.S3({
@@ -96,6 +96,32 @@ function checkFileType(file, cb) {
   }
 }
 
+function generateUniquePin() {
+  var chars = "01234567890abcdefghijklmnopqrstuvwxyz";
+  var pinLength = 5;
+  var uniquePin = "";
+  for (var i = 0; i <= pinLength; i++) {
+    var randomNum = Math.floor(Math.random() * chars.length);
+    uniquePin += chars.substring(randomNum, randomNum + 1);
+  }
+  return uniquePin;
+}
+
+function checkIfPinExists(generatedPin) {
+  redisClient.get(generatedPin, (err, reply) => {
+    if (err) {
+      console.error("Error occurred:", err);
+      // Handle the error case
+    } else {
+      if (reply === null) {
+        console.log(`The PIN '${generatedPin}' does not exist in Redis.`);
+      } else {
+        console.log(`The PIN '${generatedPin}' already exists in Redis.`);
+      }
+    }
+  });
+}
+
 app.post("/upload", upload, async function (req, res, next) {
   let images = [];
   try {
@@ -108,19 +134,6 @@ app.post("/upload", upload, async function (req, res, next) {
     await Promise.all(
       req.files.map(async (file) => {
         const newFileName = `${Date.now()}-${file.originalname}`;
-
-        // const savePath = `public/images/processed/${newFileName}`;
-        // await sharp(file.path)
-        //   .resize(640, 320)
-        //   .toFormat("jpeg")
-        //   .jpeg({ quality: 90 })
-        //   .toFile(savePath);
-
-        // images.push({
-        //   processed: `/images/processed/${newFileName}`,
-        //   uploaded: `/images/uploaded/${file.originalname}`,
-        // });
-        // return `/images/processed/${newFileName}`;
 
         const processedImage = await sharp(file.buffer)
           .resize({ width: 640, height: 320 })
@@ -141,6 +154,12 @@ app.post("/upload", upload, async function (req, res, next) {
           processed: processedImage,
           uploaded: file.buffer,
         });
+
+        const imageUrl = `https://${bucketName}.s3.ap-southeast-2.amazonaws.com/processed/${newFileName}`;
+
+        var pin = generateUniquePin();
+        redisClient.set(pin, imageUrl);
+        console.log("Saved in redis");
       })
     );
     // console.log(images);
@@ -149,6 +168,20 @@ app.post("/upload", upload, async function (req, res, next) {
     res.json({ success: false, message: "Error processing images" });
   }
 });
+
+app.get("/image/:pin", async (req, res) => {
+  const pin = req.params.pin;
+  console.log("Requested pin:", pin);
+
+  const imageUrl = await redisClient.get(pin);
+  if (imageUrl) {
+    console.log("Image URL:", imageUrl);
+    res.redirect(imageUrl);
+  } else {
+    console.log("Pin does not exist");
+  }
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
