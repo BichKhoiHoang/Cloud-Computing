@@ -9,9 +9,14 @@
     <% images.forEach(image => { %>
     <div>
       <h3>Original Image</h3>
-      <img src="<%= image.uploaded %>" alt="Original Image" />
+      <img
+        src="data:image/jpeg;base64,<%= image.uploaded.toString('base64') %>"
+      />
       <h3>Resized Image</h3>
-      <img src="<%= image.processed %>" alt="Resized Image" />
+      <img
+        src="data:image/jpeg;base64,<%= image.processed.toString('base64') %>"
+      />
+      <button class="download-btn">Download</button>
     </div>
     <% }); %>
   </body>
