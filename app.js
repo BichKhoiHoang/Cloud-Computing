@@ -60,22 +60,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/upload", uploadRouter);
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "public/images/uploaded");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
-
-// const upload = multer({
-//   storage: storage,
-//   // fileFilter: function (req, file, cb) {
-//   //   checkFileType(file, cb);
-//   // },
-// });
-
 app.get("/image/:pin", async (req, res) => {
   const pin = req.params.pin;
   console.log("Requested pin:", pin);
