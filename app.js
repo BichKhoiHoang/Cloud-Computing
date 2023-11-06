@@ -15,16 +15,17 @@ const sharp = require("sharp");
 
 const app = express();
 
+// TODO: EXPORT TO ENV FILE
 // Cloud Services Set-up
 // Create unique bucket name and this bucket is public (objects can be accessed).
 const bucketName = "khoihoang-19122001";
 // const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 const s3 = new AWS.S3({
   // AWS credentials and region configuration
-  accessKeyId: "ASIA5DYSEEJ4WLA2CWIF",
-  secretAccessKey: "UtUz4oxlLKVmd/PxaDZBd4o/WCh78nUDjas4GdWa",
+  accessKeyId: "ASIA5DYSEEJ42G655SH7",
+  secretAccessKey: "sJUmnpSveOVYqOoOqVlcBVW9FmsVidKob49E6n71",
   sessionToken:
-    "IQoJb3JpZ2luX2VjEDQaDmFwLXNvdXRoZWFzdC0yIkcwRQIgBWNSOC6/nfBL/rhq1ZwNopVa8LwRzaCPuW1QxcJBJisCIQC/zPe49+8nm65wnGlYCvNnSuEHBSp0QkY3EVHL98N5YCqlAwhtEAMaDDkwMTQ0NDI4MDk1MyIM1MJ2DKYMlFJnxelLKoIDUSN4wQoCW8V4jKurROe0ekZOSkzx1DiGyoij+4jxB7Ks0xOyV2FjX4d8IYVL6m4wj6bL+VUfKU7/x+OVjpUbJqEmPDAtrF65+V+ZxBP7Ugym4y6oGER6gVFLL241FC6WqGFAqodXEVL9xwaDOms8gUU5XngnWyr3MEPViGGkt+GpCTEZ27uZo0Y8QCUBCw7Lf2b4e8YQjIYVf/TKIE/zEVwQNtrivw7X7Hi+1Ob1ukdGawwwYNlToZb5EqXtARaeuzEhaFQNUsvivm3L5lhLf80V2TL0rd/F194Tw6Y72ToTZoB8n9sD2o6jL7l643LpW6rmgj0lCGtP4tx7s5b/+iccL/I37+2CcJaBZN0Q74cl2DNib5II9Fef8yzHesPUHTeR5JNp+2Zb8UaG31HInslZNP0WfOn53SGpvhvTRkSPCRhY9VXs9eV1sSlNZfR0Prgc0+2k9Ya8XxD1N9RUHFmhRAVmR+RGJygkR1ZnMIcEuIbT1mT8+4qZl6HZSeV49jMwxp6cqgY6pgGfGNrjr7YmtVhyTnG7laAPr4DygkQ9g6u/5RcCNrOGKURlFdNErf9G5WIY3x+UxatzS3MMW+H1T4hNwl33dfoLzDMtRNfl3k9drKDUZP7wASG3utqMbIBYoGNG45zIDtUwFDqvIrB5jW9oW+/2Sc5MNInS/+xQrvEUXCYFPQroWwjei3H+ze1b+UmNUTman7u+GHiy6dNcQv5ITx3yl95MJtSXd3Bw",
+    "IQoJb3JpZ2luX2VjEEkaDmFwLXNvdXRoZWFzdC0yIkgwRgIhAJ/5NnyobXPXW1gnNXCdiIM7Vm6ISsRUcZndEAa1E1nuAiEA77jSSncGSViEJn473pr1YfyN2xm7/yPrIRWGLTYAXQ0qrgMIgv//////////ARADGgw5MDE0NDQyODA5NTMiDH0/bYv64mtvWponhyqCA1PYw/CYEdZ7+/pGOopoIcTwao7RJpY0UuY43nD73KYUDu7V32/i8dIMb3XV9e46yWpJV4c1PFxIjZVjHPB2tqCP0UoulVdX2A5vPeGixRHf8qfBFclU8q68vs+wrUihZqOvL3lI44QFQNLON9CdKEaQjZ6DBGeCdgrkYMkYPRJ6hQNLdnfBCoyuACr2XB+wV8Y0W3QJ1tE4UN9KTB2fz+9V0WfOOBgYSdyWzJ5JtFNFFm43/GI1w7XPhwU9zy7Qfx1Vj+z8xf8IHhoK1hGFPL8DFoMZK4HPIGk4jtDMROozum4Wlj8FxrvxxJNmfzd+mWnK3cZ3Bic6h92d901IT2CDZsV289SteSBzvbTRjFuK0vusCtPHBGyCYdWwmG+76hUmoAZH1GZr3+8XdSHpX70VMM8vA2nYikwWtGu/ZpG4SSN/Ja4S+1R2PqVfPLtgc6Il6ajdMCQKQLKfQC0ZnL2ywlSippKTveQGgGD7Z+qoSK4fALSTTT7Or/e3xLb4vPckMI37oKoGOqUBvVylH+oebN9ZGnAJQxgl1DUxA8LufgFTPfLMWi80yl8xCgCpxxAJDkjNahLi30m6wkx9yqcs6ZzDdgvb00i9HhZx231nuo/ipUig0wuJA0SvbAAAmnuK/wkEY0GE0rygRNEybkdm/NjfZD4bhVOv380rjRVMkBVRhrL7DSadjE7ngdaOgWzggCRX7K+kpRHEkDPgQiwtPSJvPSjh2VT/TfObd/0n",
   region: "ap-southeast-2",
 });
 
@@ -123,6 +124,7 @@ function checkIfPinExists(generatedPin) {
 }
 
 app.post("/upload", upload, async function (req, res, next) {
+  console.log(req.body);
   let images = [];
   try {
     if (

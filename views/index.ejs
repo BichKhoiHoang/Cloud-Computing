@@ -9,8 +9,8 @@
       <div class="text-center w-full p-4">
         <h1 class="text-5xl font-bold">Upload Images</h1>
       </div>
-      <div class="w-full items-center justify-center flex p-4">
-        <form method="POST" action="/upload" enctype="multipart/form-data">
+      <div class="w-full flex p-4">
+        <form method="POST" action="/upload" enctype="multipart/form-data" class="w-full justify-center">
           <input
             type="file"
             id="image_input"
@@ -20,6 +20,36 @@
             class="file-input file-input-bordered w-full max-w-xs"
           />
           <input type="submit" value="Upload" class="btn btn-primary" />
+          <div class="divider"></div>
+          <div class="grid grid-cols-2 w-full">
+            <div>
+          <label for="file_type">File Output</label>
+          <select class="select select-bordered w-full max-w-xs" id="file_type" name="file_type">
+            <option disabled>Choose One</option>
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+            <option value="gif">GIF</option>
+            <option value="webp">WEBP</option>
+          </select>
+          <div class="form-control w-max space-x-4">
+            <label class="label cursor-pointer">
+              <span class="label-text">Include Original Metadata?</span> 
+              <input type="checkbox" checked="checked" class="checkbox" name="original_metadata" id="org-metadata"/>
+            </label>
+          </div>  
+            </div>
+            <div>
+          <label for="file_type">Aspect Ratio</label>
+          <select class="select select-bordered w-full max-w-xs" id="aspect_ratio" name="aspect_ratio">
+            <option disabled>Choose One</option>
+            <option value="16:9">16:9</option>
+            <option value="1:1">1:1</option>
+            <option value="1:2">1:2</option>
+            <option value="3:4">3:4</option>
+          </select>
+            
+            </div>
+          </div>
         </form>
       </div>
       <div
