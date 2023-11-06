@@ -14,21 +14,27 @@
           method="POST"
           action="/upload"
           enctype="multipart/form-data"
-          class="w-full justify-center"
+          class="w-full grid place-center"
         >
-          <input
-            type="file"
-            id="image_input"
-            name="images"
-            accept="image/*"
-            multiple
-            class="file-input file-input-bordered w-full max-w-xs"
-          />
-          <input type="submit" value="Upload" class="btn btn-primary" />
-          <div class="divider"></div>
-          <div class="grid grid-cols-2 w-full">
-            <div>
-              <label for="file_type">File Output</label>
+          <div class="flex w-full space-x-2 justify-center">
+            <input
+              type="file"
+              id="image_input"
+              name="images"
+              accept="image/*"
+              multiple
+              class="file-input file-input-bordered"
+            />
+            <input
+              type="submit"
+              value="Convert Images"
+              class="btn btn-primary"
+            />
+          </div>
+          <div class="divider">Additional Options</div>
+          <div class="flex flex-wrap w-full space-x-4">
+            <label for="file_type"
+              >File Output
               <select
                 class="select select-bordered w-full max-w-xs"
                 id="file_type"
@@ -40,21 +46,9 @@
                 <option value="gif">GIF</option>
                 <option value="webp">WEBP</option>
               </select>
-              <div class="form-control w-max space-x-4">
-                <label class="label cursor-pointer">
-                  <span class="label-text">Include Original Metadata?</span>
-                  <input
-                    type="checkbox"
-                    checked="checked"
-                    class="checkbox"
-                    name="original_metadata"
-                    id="org-metadata"
-                  />
-                </label>
-              </div>
-            </div>
-            <div>
-              <label for="file_type">Aspect Ratio</label>
+            </label>
+            <label for="aspect_ratio"
+              >Aspect Ratio
               <select
                 class="select select-bordered w-full max-w-xs"
                 id="aspect_ratio"
@@ -66,10 +60,25 @@
                 <option value="1:2">1:2</option>
                 <option value="3:4">3:4</option>
               </select>
+            </label>
+            <div class="form-control w-max">
+              <label class="label cursor-pointer space-x-2">
+                <span class="label-text">Include Original Metadata?</span>
+                <input
+                  type="checkbox"
+                  checked="checked"
+                  class="checkbox"
+                  name="original_metadata"
+                  id="org-metadata"
+                />
+              </label>
             </div>
           </div>
         </form>
       </div>
+      <button id="clear_all_button" class="btn btn-outline btn-accent">
+        Clear All Images
+      </button>
       <div
         id="display_selected_image"
         class="w-full p-4 border-slate-400 border h-[50vh] flex overflow-scroll gap-2"

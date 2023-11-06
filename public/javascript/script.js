@@ -1,12 +1,21 @@
 const image_input = document.querySelector("#image_input");
 const frame = document.querySelector("#display_selected_image");
+const clear_btn = document.querySelector("#clear_all_button");
+
+const reader = new FileReader();
+
+clear_btn.addEventListener("click", () => {
+  image_input.value = "";
+  const images = document.querySelectorAll(".uploaded-image");
+  images.forEach((image) => {
+    image.remove();
+  });
+});
 
 image_input.addEventListener("change", function () {
   display_selected_image.innerHTML = "";
 
   for (const file of this.files) {
-    const reader = new FileReader();
-
     reader.addEventListener("load", function () {
       const uploaded_image = reader.result;
 
@@ -14,6 +23,7 @@ image_input.addEventListener("change", function () {
       const imgElement = document.createElement("img");
       imgElement.src = uploaded_image;
       imgElement.classList.add("flex-auto"); // Add a class for styling
+      imgElement.classList.add("uploaded-image"); // Add a class for styling
 
       // Append the image element to the frame
       frame.appendChild(imgElement);
