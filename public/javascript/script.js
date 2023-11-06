@@ -2,8 +2,6 @@ const image_input = document.querySelector("#image_input");
 const frame = document.querySelector("#display_selected_image");
 const clear_btn = document.querySelector("#clear_all_button");
 
-const reader = new FileReader();
-
 clear_btn.addEventListener("click", () => {
   image_input.value = "";
   const images = document.querySelectorAll(".uploaded-image");
@@ -15,7 +13,12 @@ clear_btn.addEventListener("click", () => {
 image_input.addEventListener("change", function () {
   display_selected_image.innerHTML = "";
 
-  for (const file of this.files) {
+  let files = this.files;
+  let readers = [];
+
+  for (let i = 0; i < files.length; i++) {
+    let reader = new FileReader();
+
     reader.addEventListener("load", function () {
       const uploaded_image = reader.result;
 
@@ -29,6 +32,7 @@ image_input.addEventListener("change", function () {
       frame.appendChild(imgElement);
     });
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(files[i]);
+    readers.push(reader);
   }
 });
