@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     res.redirect(imageUrl);
   } else {
     console.log("Pin does not exist");
-    res.redirect("/");
+    res.redirect("/?error=true&msg=Pin does not exist");
   }
 });
 

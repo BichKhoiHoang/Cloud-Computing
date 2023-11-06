@@ -7,11 +7,17 @@ const uploader = require("../helpers/uploader");
 const s3Client = require("../helpers/s3Client");
 const redisClient = require("../helpers/redis");
 
-/* GET users listing. */
+/*
+
+POST /upload
+
+Upload images, process them and save to s3 and redis
+
+*/
 router.post("/", uploader, async function (req, res, next) {
   let images = [];
   const params = req.body;
-  console.log(params);
+
   try {
     if (
       req.fileValidationError &&
@@ -24,7 +30,7 @@ router.post("/", uploader, async function (req, res, next) {
         const newFileName = `${Date.now()}-${file.originalname.split(".")[0]}.${
           params.file_type
         }`;
-        console.log(file);
+
         let processedImage = await convertImage(
           file.buffer,
           params.width,
@@ -63,11 +69,7 @@ router.post("/", uploader, async function (req, res, next) {
     );
     res.render("processed", { images: images, title: "Converted Images" });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error processing images",
-      reason: error.message,
-    });
+    next(createError(500));
   }
 });
 
