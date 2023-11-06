@@ -45,20 +45,23 @@ router.post("/", uploader, async function (req, res, next) {
 
         const imageUrl = `https://${process.env.bucketName}.s3.${process.env.region}.amazonaws.com/processed/${newFileName}`;
 
+        const pin = generateUniquePin();
+
+        redisClient.set(pin, imageUrl);
+
         images.push({
           processed: processedImage,
           uploaded: file.buffer,
           url: encodeURI(imageUrl),
+          image_data: {
+            width: params.width,
+            height: params.height,
+          },
+          pin: pin,
         });
-
-        const pin = generateUniquePin();
-        console.log("Caching Images", imageUrl);
-        redisClient.set(pin, imageUrl);
-        console.log("Saved in redis");
       })
     );
-    // console.log(images);
-    res.render("result", { images: images, title: "Converted Images" });
+    res.render("processed", { images: images, title: "Converted Images" });
   } catch (error) {
     res.status(500).json({
       success: false,

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("partials/head") %>
+  </head>
+  <body>
+    <%- include("components/navbar") %>
+    <main class="container mx-auto h-[90vh] my-auto">
+      <h1 class="text-5xl text-center font-bold">Converted Files Are Ready!</h1>
+      <div class="divider"></div>
+      <div class="grid grid-cols-<%-images.length%> space-x-4">
+        <% images.forEach(image => { %>
+        <div class="card w-full bg-base-200 shadow-xl m-4">
+          <figure>
+            <img
+              src="data:image/jpeg;base64,<%= image.uploaded.toString('base64') %>"
+              alt="converted photo"
+              class="aspect-square object-contain"
+            />
+          </figure>
+          <div class="card-body">
+            <div class="card-actions flex justify-center">
+              <a href="<%= image.url %>" class="btn btn-primary">Download</a>
+              <div class="tooltip" data-tip="Share image with pin">
+                <button class="btn" onclick="copy('<%- image.pin %>')">
+                  <%= image.pin %>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <div class="w-full flex justify-center m-4">
+        <a href="/" class="btn btn-wide btn-ghost btn-outline"
+          >Convert More Photos</a
+        >
+      </div>
+    </main>
+    <script>
+      function copy(code) {
+        navigator.clipboard.writeText(code);
+        Toastify({
+          text: "Pin Copied!",
+          duration: 3000,
+          close: true,
+          gravity: "bottom", // `top` or `bottom`
+          position: "center", // `left`, `center` or `right`
+        }).showToast();
+      }
+    </script>
+    <div
+      class="grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5"
+    ></div>
+  </body>
+</html>
