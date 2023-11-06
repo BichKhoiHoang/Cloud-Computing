@@ -21,30 +21,18 @@ router.post("/", uploader, async function (req, res, next) {
     }
     await Promise.all(
       req.files.map(async (file) => {
-        const newFileName = encodeURI(`${Date.now()}-${file.originalname}`);
+        const newFileName = `${Date.now()}-${file.originalname.split(".")[0]}.${
+          params.file_type
+        }`;
         console.log(file);
-        let processedImage;
-
-        if (params.original_metadata) {
-          processedImage = await sharp(file.buffer)
-            .withMetadata()
-            .resize({
-              width: params.width,
-              height: params.height,
-              fit: params.crop_type,
-            })
-            .toFormat(params.file_type)
-            .toBuffer();
-        } else {
-          processedImage = await sharp(file.buffer)
-            .resize({
-              width: params.width,
-              height: params.height,
-              fit: params.crop_type,
-            })
-            .toFormat(params.file_type)
-            .toBuffer();
-        }
+        let processedImage = await convertImage(
+          file.buffer,
+          params.width,
+          params.height,
+          params.original_metadata ? true : false,
+          params.file_format,
+          params.crop_type
+        );
 
         const processedParams = {
           Bucket: process.env.bucketName,
@@ -60,7 +48,7 @@ router.post("/", uploader, async function (req, res, next) {
         images.push({
           processed: processedImage,
           uploaded: file.buffer,
-          url: imageUrl,
+          url: encodeURI(imageUrl),
         });
 
         const pin = generateUniquePin();
@@ -118,6 +106,34 @@ function checkIfPinExists(generatedPin) {
       }
     }
   });
+}
+
+async function convertImage(
+  buffer,
+  height = null,
+  width = null,
+  metadata = false,
+  format = "jpeg",
+  fit = "cover"
+) {
+  const newWidth = width === "" ? null : parseInt(width);
+  const newHeight = height === "" ? null : parseInt(height);
+
+  console.log(newWidth, newHeight);
+
+  let processedImage = await sharp(buffer);
+
+  if (metadata) processedImage.withMetadata();
+
+  processedImage
+    .resize({
+      width: newWidth,
+      height: newHeight,
+      fit: fit,
+    })
+    .toFormat(format, { quality: 80 });
+
+  return processedImage;
 }
 
 module.exports = router;

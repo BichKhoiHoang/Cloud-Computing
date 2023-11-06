@@ -54,10 +54,12 @@
               <select
                 class="select select-bordered w-full max-w-xs"
                 id="crop_type"
+                name="crop_type"
                 required
               >
                 <option disabled>Choose One</option>
                 <option value="cover">Cover</option>
+                <option value="fill">Fill</option>
                 <option value="contain">Contain</option>
                 <option value="inside">Inside</option>
                 <option value="outside">Outside</option>
@@ -69,6 +71,7 @@
                 placeholder="Enter Width"
                 class="input input-bordered w-full max-w-xs"
                 id="width"
+                name="width"
             /></label>
             <label for="height"
               >Height<input
@@ -76,6 +79,7 @@
                 placeholder="Enter Height"
                 class="input input-bordered w-full max-w-xs"
                 id="height"
+                name="height"
             /></label>
             <div class="form-control w-max">
               <label class="label cursor-pointer space-x-2">
