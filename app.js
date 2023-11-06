@@ -9,43 +9,9 @@ const AWS = require("aws-sdk");
 
 const indexRouter = require("./routes/index");
 const uploadRouter = require("./routes/upload");
+const pinRouter = require("./routes/pin");
 
 const app = express();
-
-// TODO: EXPORT TO ENV FILE
-// Cloud Services Set-up
-// Create unique bucket name and this bucket is public (objects can be accessed).
-const bucketName = process.env.bucketName;
-// const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-const s3 = new AWS.S3({
-  // AWS credentials and region configuration
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey,
-  sessionToken: process.env.sessionToken,
-  region: process.env.region,
-});
-
-(async () => {
-  try {
-    await s3.createBucket({ Bucket: process.env.bucketName }).promise();
-    console.log(`Created bucket: ${process.env.bucketName}`);
-  } catch (err) {
-    // We will ignore 409 errors which indicate that the bucket already exists;
-    if (err.statusCode !== 409) {
-      console.log(`Error creating bucket: ${err}`);
-    }
-  }
-})();
-
-// Redis setup
-const redisClient = redis.createClient();
-(async () => {
-  try {
-    await redisClient.connect();
-  } catch (err) {
-    console.log(err);
-  }
-})();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -59,19 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/upload", uploadRouter);
-
-app.get("/image/:pin", async (req, res) => {
-  const pin = req.params.pin;
-  console.log("Requested pin:", pin);
-
-  const imageUrl = await redisClient.get(pin);
-  if (imageUrl) {
-    console.log("Image URL:", imageUrl);
-    res.redirect(imageUrl);
-  } else {
-    console.log("Pin does not exist");
-  }
-});
+app.use("/pin", pinRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -86,7 +40,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render("error", { title: `Error ${err.status}` });
 });
 
 module.exports = app;
