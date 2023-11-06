@@ -21,7 +21,7 @@ router.post("/", uploader, async function (req, res, next) {
     }
     await Promise.all(
       req.files.map(async (file) => {
-        const newFileName = `${Date.now()}-${file.originalname}`;
+        const newFileName = encodeURI(`${Date.now()}-${file.originalname}`);
         console.log(file);
         let processedImage;
 
@@ -55,21 +55,22 @@ router.post("/", uploader, async function (req, res, next) {
         const s3 = await s3Client();
         await s3.upload(processedParams).promise();
 
+        const imageUrl = `https://${process.env.bucketName}.s3.${process.env.region}.amazonaws.com/processed/${newFileName}`;
+
         images.push({
           processed: processedImage,
           uploaded: file.buffer,
+          url: imageUrl,
         });
 
-        const imageUrl = `https://${process.env.bucketName}.s3.${process.env.region}.amazonaws.com/processed/${newFileName}`;
-
         const pin = generateUniquePin();
-        console.log("Caching Images");
+        console.log("Caching Images", imageUrl);
         redisClient.set(pin, imageUrl);
         console.log("Saved in redis");
       })
     );
     // console.log(images);
-    res.render("result", { images });
+    res.render("result", { images: images, title: "Converted Images" });
   } catch (error) {
     res.status(500).json({
       success: false,

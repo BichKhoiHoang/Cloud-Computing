@@ -5,9 +5,9 @@
   </head>
   <body>
     <%- include("components/navbar") %>
-    <main class="container mx-auto p-10">
+    <main class="container mx-auto p-10 min-h-[90vh] flex flex-col">
       <div class="text-center w-full p-4">
-        <h1 class="text-5xl font-bold">Upload Images</h1>
+        <h1 class="text-5xl font-bold">Convert Images</h1>
       </div>
       <div class="w-full flex p-4">
         <form
@@ -31,7 +31,9 @@
             class="btn btn-primary w-1/2 mx-auto my-2"
           />
           <div class="divider">Additional Options</div>
-          <div class="flex flex-wrap w-full space-x-4 items-center">
+          <div
+            class="flex flex-wrap w-full space-x-4 items-center justify-center"
+          >
             <label for="file_type"
               >File Output
               <select
@@ -90,14 +92,30 @@
           </div>
         </form>
       </div>
-      <button id="clear_all_button" class="btn btn-outline btn-secondary m-4">
+      <div class="divider"></div>
+      <button
+        id="clear_all_button"
+        class="btn btn-outline btn-ghost mb-4 mx-auto block flex"
+      >
         Clear All Images
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+        >
+          <path
+            d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"
+            fill="currentColor"
+          />
+        </svg>
       </button>
       <div
         id="display_selected_image"
-        class="w-full p-4 border-slate-400 border h-[45vh] flex overflow-scroll gap-2"
+        class="w-full p-4 border-slate-400 border flex overflow-x-scroll overflow-y-hidden gap-2 grow max-h-[20rem]"
       ></div>
     </main>
+    <div class="aspect-w-1 aspect-h-1 none"></div>
     <script src="javascript/script.js"></script>
   </body>
 </html>

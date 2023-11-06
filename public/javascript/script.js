@@ -27,7 +27,7 @@ image_input.addEventListener("change", function () {
       imgElement.src = uploaded_image;
       imgElement.classList.add("flex-auto"); // Add a class for styling
       imgElement.classList.add("uploaded-image"); // Add a class for styling
-
+      imgElement.style = "height: 16rem;";
       // Append the image element to the frame
       frame.appendChild(imgElement);
     });
