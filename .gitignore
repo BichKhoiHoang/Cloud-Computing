@@ -62,3 +62,4 @@ typings/
 
 public/images/processed/*
 public/images/uploaded/*
+dump.rdb
