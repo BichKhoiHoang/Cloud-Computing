@@ -1,3 +1,20 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("partials/head") %>
+  </head>
+  <body>
+    <%- include("components/navbar") %>
+    <main class="hero min-h-[90vh]">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-5xl font-bold">Uh Oh! Error <%= error.status %></h1>
+          <p class="py-6">
+            Looks like there is an issue around, please head on home
+          </p>
+          <a href="/" class="btn btn-primary btn-wide">Home</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
