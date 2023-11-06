@@ -122,8 +122,6 @@ async function convertImage(
   const newWidth = width === "" ? null : parseInt(width);
   const newHeight = height === "" ? null : parseInt(height);
 
-  console.log(newWidth, newHeight);
-
   let processedImage = await sharp(buffer);
 
   if (metadata) processedImage.withMetadata();

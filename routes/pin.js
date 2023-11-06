@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/:pin", async (req, res) => {
-  const pin = req.params.pin;
+const redisClient = require("../helpers/redis");
+
+router.post("/", async (req, res) => {
+  const pin = req.body.pin;
   console.log("Requested pin:", pin);
 
   const imageUrl = await redisClient.get(pin);
@@ -11,6 +13,7 @@ router.get("/:pin", async (req, res) => {
     res.redirect(imageUrl);
   } else {
     console.log("Pin does not exist");
+    res.redirect("/");
   }
 });
 

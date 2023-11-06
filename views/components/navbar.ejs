@@ -45,11 +45,11 @@
     </button>
   </div>
 </div>
-<dialog id="my_modal_2" class="modal" action="/pin">
+<dialog id="my_modal_2" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-xl">Someone's given you a pin?</h3>
     <div class="divider"></div>
-    <form class="flex items-end space-x-2">
+    <form class="flex items-end space-x-2" action="/pin" method="POST">
       <div class="form-control w-full max-w-xs">
         <label class="label">
           <span class="label-text">Type your pin in here</span>
@@ -60,6 +60,8 @@
           placeholder="ABC12"
           class="input input-bordered w-full max-w-xs"
           required
+          id="pin"
+          name="pin"
         />
       </div>
       <button class="btn btn-primary" type="submit">Send Pin</button>

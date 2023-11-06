@@ -1,11 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const createError = require("http-errors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const redis = require("redis");
-require("dotenv").config();
-const AWS = require("aws-sdk");
 
 const indexRouter = require("./routes/index");
 const uploadRouter = require("./routes/upload");
