@@ -12,6 +12,7 @@ const uploadRouter = require("./routes/upload");
 
 const app = express();
 
+// TODO: EXPORT TO ENV FILE
 // Cloud Services Set-up
 // Create unique bucket name and this bucket is public (objects can be accessed).
 const bucketName = process.env.bucketName;
