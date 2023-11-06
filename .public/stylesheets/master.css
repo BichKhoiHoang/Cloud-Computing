@@ -732,6 +732,12 @@ html {
   }
 }
 
+.avatar.placeholder > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (hover:hover) {
   .label a:hover {
     --tw-text-opacity: 1;
@@ -957,13 +963,6 @@ html {
     border-color: hsl(var(--pf) / var(--tw-border-opacity));
     --tw-bg-opacity: 1;
     background-color: hsl(var(--pf) / var(--tw-bg-opacity));
-  }
-
-  .btn-secondary:hover {
-    --tw-border-opacity: 1;
-    border-color: hsl(var(--sf) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsl(var(--sf) / var(--tw-bg-opacity));
   }
 
   .btn-accent:hover {
@@ -1391,23 +1390,6 @@ html {
   background-color: hsl(var(--pf) / var(--tw-bg-opacity));
 }
 
-.btn-secondary {
-  --tw-border-opacity: 1;
-  border-color: hsl(var(--s) / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--s) / var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: hsl(var(--sc) / var(--tw-text-opacity));
-  outline-color: hsl(var(--s) / 1);
-}
-
-.btn-secondary.btn-active {
-  --tw-border-opacity: 1;
-  border-color: hsl(var(--sf) / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--sf) / var(--tw-bg-opacity));
-}
-
 .btn-accent {
   --tw-border-opacity: 1;
   border-color: hsl(var(--a) / var(--tw-border-opacity));
@@ -1782,6 +1764,10 @@ html {
 
 .input[list]::-webkit-calendar-picker-indicator {
   line-height: 1em;
+}
+
+.input-bordered {
+  --tw-border-opacity: 0.2;
 }
 
 .input:focus,
@@ -2224,10 +2210,6 @@ html {
 
 .cursor-pointer {
   cursor: pointer;
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .flex-wrap {

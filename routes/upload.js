@@ -10,6 +10,8 @@ const redisClient = require("../helpers/redis");
 /* GET users listing. */
 router.post("/", uploader, async function (req, res, next) {
   let images = [];
+  const params = req.body;
+  console.log(params);
   try {
     if (
       req.fileValidationError &&
@@ -20,12 +22,29 @@ router.post("/", uploader, async function (req, res, next) {
     await Promise.all(
       req.files.map(async (file) => {
         const newFileName = `${Date.now()}-${file.originalname}`;
+        console.log(file);
+        let processedImage;
 
-        const processedImage = await sharp(file.buffer)
-          .resize({ width: 640, height: 320 })
-          .toFormat("jpeg")
-          .jpeg({ quality: 90 })
-          .toBuffer();
+        if (params.original_metadata) {
+          processedImage = await sharp(file.buffer)
+            .withMetadata()
+            .resize({
+              width: params.width,
+              height: params.height,
+              fit: params.crop_type,
+            })
+            .toFormat(params.file_type)
+            .toBuffer();
+        } else {
+          processedImage = await sharp(file.buffer)
+            .resize({
+              width: params.width,
+              height: params.height,
+              fit: params.crop_type,
+            })
+            .toFormat(params.file_type)
+            .toBuffer();
+        }
 
         const processedParams = {
           Bucket: process.env.bucketName,
@@ -35,14 +54,13 @@ router.post("/", uploader, async function (req, res, next) {
 
         const s3 = await s3Client();
         await s3.upload(processedParams).promise();
-        console.log("processed image saved on s3!");
 
         images.push({
           processed: processedImage,
           uploaded: file.buffer,
         });
 
-        const imageUrl = `https://${process.env.bucketName}.s3.ap-southeast-2.amazonaws.com/processed/${newFileName}`;
+        const imageUrl = `https://${process.env.bucketName}.s3.${process.env.region}.amazonaws.com/processed/${newFileName}`;
 
         const pin = generateUniquePin();
         console.log("Caching Images");
