@@ -1,9 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-
 const sharp = require("sharp");
 
-const uploader = require("../helpers/uploader.js");
+const uploader = require("../helpers/uploader");
+const s3Client = require("../helpers/s3Client");
+const redisClient = require("../helpers/redis");
 
 /* GET users listing. */
 router.post("/", uploader, async function (req, res, next) {
@@ -31,6 +33,7 @@ router.post("/", uploader, async function (req, res, next) {
           Body: processedImage,
         };
 
+        const s3 = await s3Client();
         await s3.upload(processedParams).promise();
         console.log("processed image saved on s3!");
 
@@ -39,9 +42,10 @@ router.post("/", uploader, async function (req, res, next) {
           uploaded: file.buffer,
         });
 
-        const imageUrl = `https://${bucketName}.s3.ap-southeast-2.amazonaws.com/processed/${newFileName}`;
+        const imageUrl = `https://${process.env.bucketName}.s3.ap-southeast-2.amazonaws.com/processed/${newFileName}`;
 
-        var pin = generateUniquePin();
+        const pin = generateUniquePin();
+        console.log("Caching Images");
         redisClient.set(pin, imageUrl);
         console.log("Saved in redis");
       })
@@ -49,7 +53,11 @@ router.post("/", uploader, async function (req, res, next) {
     // console.log(images);
     res.render("result", { images });
   } catch (error) {
-    res.json({ success: false, message: "Error processing images" });
+    res.status(500).json({
+      success: false,
+      message: "Error processing images",
+      reason: error.message,
+    });
   }
 });
 

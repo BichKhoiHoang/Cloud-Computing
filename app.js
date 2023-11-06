@@ -25,8 +25,6 @@ const s3 = new AWS.S3({
   region: process.env.region,
 });
 
-console.log(process.env);
-
 (async () => {
   try {
     await s3.createBucket({ Bucket: process.env.bucketName }).promise();
