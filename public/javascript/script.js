@@ -16,6 +16,18 @@ image_input.addEventListener("change", function () {
   let files = this.files;
   let readers = [];
 
+  if (files.length > 5) {
+    Toastify({
+      text: "Too many photos! Only 5 allowed",
+      duration: 3000,
+      close: true,
+      gravity: "bottom", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+    }).showToast();
+    image_input.value = "";
+    return;
+  }
+
   for (let i = 0; i < files.length; i++) {
     let reader = new FileReader();
 
