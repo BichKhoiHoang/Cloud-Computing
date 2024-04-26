@@ -11,7 +11,9 @@ https://${bucketName}.s3.ap-southeast-2.amazonaws.com/processed/${processedImage
 
 <img width="976" alt="Screenshot 2024-04-26 at 8 27 57 PM" src="https://github.com/BichKhoiHoang/Cloud-Computing/assets/96985585/4fd0c473-6a0e-4dbb-8c72-394b7cbc65d5">
 
+
 Cloud Architect:
+
 <img width="709" alt="Screenshot 2024-04-26 at 8 28 50 PM" src="https://github.com/BichKhoiHoang/Cloud-Computing/assets/96985585/3a4a4ce7-f2b8-42d4-b412-6db4dafae141">
 
 
